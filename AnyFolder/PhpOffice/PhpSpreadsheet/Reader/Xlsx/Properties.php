@@ -52,8 +52,8 @@ class Properties
 
             $this->docProps->setCreator((string) self::getArrayItem($xmlCore->xpath('dc:creator')));
             $this->docProps->setLastModifiedBy((string) self::getArrayItem($xmlCore->xpath('cp:lastModifiedBy')));
-            $this->docProps->setCreated((int) strtotime((string) self::getArrayItem($xmlCore->xpath('dcterms:created')))); //! respect xsi:type
-            $this->docProps->setModified((int) strtotime((string) self::getArrayItem($xmlCore->xpath('dcterms:modified')))); //! respect xsi:type
+            $this->docProps->setCreated((string) self::getArrayItem($xmlCore->xpath('dcterms:created'))); //! respect xsi:type
+            $this->docProps->setModified((string) self::getArrayItem($xmlCore->xpath('dcterms:modified'))); //! respect xsi:type
             $this->docProps->setTitle((string) self::getArrayItem($xmlCore->xpath('dc:title')));
             $this->docProps->setDescription((string) self::getArrayItem($xmlCore->xpath('dc:description')));
             $this->docProps->setSubject((string) self::getArrayItem($xmlCore->xpath('dc:subject')));
@@ -72,6 +72,9 @@ class Properties
             }
             if (isset($xmlCore->Manager)) {
                 $this->docProps->setManager((string) $xmlCore->Manager);
+            }
+            if (isset($xmlCore->HyperlinkBase)) {
+                $this->docProps->setHyperlinkBase((string) $xmlCore->HyperlinkBase);
             }
         }
     }
@@ -99,7 +102,7 @@ class Properties
     }
 
     /**
-     * @param array|false $array
+     * @param null|array|false $array
      * @param mixed $key
      */
     private static function getArrayItem($array, $key = 0): ?SimpleXMLElement
