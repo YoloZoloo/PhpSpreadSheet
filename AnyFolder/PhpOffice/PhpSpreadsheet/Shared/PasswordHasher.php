@@ -53,13 +53,13 @@ class PasswordHasher
      * Scrutinizer will squawk at the use of bitwise operations here,
      * but it should ultimately pass.
      *
-     * @param string $pPassword Password to hash
+     * @param string $password Password to hash
      */
-    private static function defaultHashPassword(string $pPassword): string
+    private static function defaultHashPassword(string $password): string
     {
         $verifier = 0;
-        $pwlen = strlen($pPassword);
-        $passwordArray = pack('c', $pwlen) . $pPassword;
+        $pwlen = strlen($password);
+        $passwordArray = pack('c', $pwlen) . $password;
         for ($i = $pwlen; $i >= 0; --$i) {
             $intermediate1 = (($verifier & 0x4000) === 0) ? 0 : 1;
             $intermediate2 = 2 * $verifier;
@@ -99,7 +99,7 @@ class PasswordHasher
         $saltValue = base64_decode($salt);
         $encodedPassword = mb_convert_encoding($password, 'UCS-2LE', 'UTF-8');
 
-        $hashValue = hash($phpAlgorithm, $saltValue . $encodedPassword, true);
+        $hashValue = hash($phpAlgorithm, $saltValue . /** @scrutinizer ignore-type */ $encodedPassword, true);
         for ($i = 0; $i < $spinCount; ++$i) {
             $hashValue = hash($phpAlgorithm, $hashValue . pack('L', $i), true);
         }
